@@ -221,7 +221,7 @@ iOSInjectionProject/
 ### SwiftPackageManager ###
 Packages
 xcuserdata
-*.xcodeproj
+#*.xcodeproj
 
 
 ### SwiftPM ###
@@ -249,13 +249,7 @@ xcuserdata
 # https://github.com/johnno1962/injectionforxcode
 
 iOSInjectionProject/
-
-### SwiftPackageManager ###
-Packages
-xcuserdata
-*.xcodeproj
-
-
+ 
 ### SwiftPM ###
 
 
