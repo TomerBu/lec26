@@ -14,7 +14,12 @@ class MapsViewController: UIViewController {
     
     @IBOutlet weak var mapView: MKMapView!
     var subscriptions: Set<AnyCancellable> = []
-    var landmarks: [Landmark] = []
+    var landmarks: [Landmark] = []{
+        didSet{
+            //add annotations:
+            mapView.addAnnotations(landmarks.map(LandmarkAnnotation.init))
+        }
+    }
     
     
     @IBAction func mapTypeChanged(_ sender: UISegmentedControl) {
@@ -40,6 +45,29 @@ class MapsViewController: UIViewController {
             self?.landmarks = landmarks
             print(landmarks)
         }.store(in: &subscriptions)
+        
+        //customise the annotations:
+        mapView.delegate = self
+    }
+}
 
+extension MapsViewController: MKMapViewDelegate{
+    
+    //how do we present the annotation: MKAnnotationView
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        
+        //the annotations we added extend LandmarkAnnotation -> has the prop landmark.
+        guard let landmarkAnnotation = annotation as? LandmarkAnnotation
+        else {return nil}
+      
+        var av = mapView
+            .dequeueReusableAnnotationView(withIdentifier: "landmark") as? MKMarkerAnnotationView
+        
+        if av == nil{
+            av = MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: "landmark")
+        }
+        
+        av?.markerTintColor = landmarkAnnotation.landmark.color
+        return av
     }
 }
