@@ -11,6 +11,7 @@ import MapKit
 import Combine
 
 class MapsViewController: UIViewController {
+    let lm = LocationManager.shared
     
     @IBOutlet weak var mapView: MKMapView!
     var subscriptions: Set<AnyCancellable> = []
@@ -19,6 +20,12 @@ class MapsViewController: UIViewController {
             //add annotations:
             mapView.addAnnotations(landmarks.map(LandmarkAnnotation.init))
         }
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+        
+        print(lm.location)
     }
     
     
@@ -47,7 +54,11 @@ class MapsViewController: UIViewController {
         }.store(in: &subscriptions)
         
         //customise the annotations:
+      
         mapView.delegate = self
+        
+        
+        mapView.showsUserLocation = true
     }
 }
 
