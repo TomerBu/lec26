@@ -8,10 +8,14 @@
 
 import UIKit
 import MapKit
+import Combine
 
 class MapsViewController: UIViewController {
     
     @IBOutlet weak var mapView: MKMapView!
+    var subscriptions: Set<AnyCancellable> = []
+    var landmarks: [Landmark] = []
+    
     
     @IBAction func mapTypeChanged(_ sender: UISegmentedControl) {
         switch sender.selectedSegmentIndex{
@@ -29,5 +33,13 @@ class MapsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        
+        Landmarks.load().sink { completion in
+            print(completion)
+        } receiveValue: {[weak self] landmarks in
+            self?.landmarks = landmarks
+            print(landmarks)
+        }.store(in: &subscriptions)
+
     }
 }
